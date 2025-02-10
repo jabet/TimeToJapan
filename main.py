@@ -13,15 +13,14 @@ root.title("Days to go to Japan!")
 # Eliminar los bordes de la ventana
 root.overrideredirect(True)
 
-
 size_x = 200
-size_y = 120
+size_y = 170
 particle_size_x = 5
 particle_size_y = 5
 
 # Cargar y redimensionar la imagen
 image = Image.open("background.jpg")
-image = image.resize((size_x, size_y), Image.LANCZOS)
+image = image.resize((size_x-2, size_y - 30), Image.LANCZOS)
 photo = ImageTk.PhotoImage(image)
 
 # Crear una etiqueta para mostrar la imagen
@@ -29,7 +28,7 @@ image_label = tk.Label(root, image=photo)
 image_label.pack()
 
 # Crear un canvas para las partículas
-canvas = tk.Canvas(root, width=size_x, height=size_y)
+canvas = tk.Canvas(root, width=size_x-2, height=size_y -30)
 canvas.place(x=0, y=0)
 
 # Mostrar la imagen en el canvas
@@ -52,8 +51,6 @@ text = [
     "¿Tienes listo el pasaporte?"
 ]
 
-
-
 # Lista para almacenar las partículas
 particles = []
 
@@ -69,7 +66,7 @@ def create_particle():
 def update_particles():
     for particle in particles:
         canvas.move(particle, 0, 1)
-        if canvas.coords(particle)[1] > size_y - particle_size_y // 2:
+        if canvas.coords(particle)[1] > size_y - 30 - particle_size_y // 2:
             canvas.delete(particle)
             particles.remove(particle)
     root.after(50, update_particles)
@@ -88,7 +85,7 @@ def update_text():
     canvas.delete("text")
     selected_text = random.choice(text)
     x = size_x // 2
-    y = size_y // 2
+    y = (size_y - 30 )// 2
     halo_color = "white"
     text_color = "red"
     font = ("Helvetica", 12)
@@ -104,8 +101,6 @@ def update_text():
     
     # Iniciar el fadeout después de 5 segundos
     root.after(5000, fadeout_text, halo_items + [text_item])
-    
-
     root.after(60000, update_text)
 
 # Función para realizar el fadeout del texto
@@ -119,6 +114,12 @@ def fadeout_text(items, alpha=1.0, step=0.10):
         for item in items:
             canvas.delete(item)
 
+def close_app():
+    root.destroy()
+
+# Crear un botón de cierre en la esquina superior derecha
+close_button = tk.Button(root, text="X", command=close_app, bg="red", fg="white", bd=0, font=("Helvetica", 10))
+close_button.place(x=size_x - 20, y=0, width=20, height=20)
 
 # Iniciar la creación y actualización de partículas
 update_countdown()
@@ -127,7 +128,7 @@ create_particle()
 update_particles()
 
 # Posicionar la ventana en la esquina superior izquierda de la pantalla
-root.geometry("+0+0")
+root.geometry(f"{size_x}x{size_y}+0+0")
 
 # Ejecutar la aplicación
 root.mainloop()
