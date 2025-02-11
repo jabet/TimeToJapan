@@ -14,7 +14,7 @@ root.title("Days to go to Japan!")
 root.overrideredirect(True)
 
 size_x = 200
-size_y = 170
+size_y = 160
 particle_size_x = 5
 particle_size_y = 5
 
@@ -104,12 +104,12 @@ def update_text():
     root.after(60000, update_text)
 
 # Función para realizar el fadeout del texto
-def fadeout_text(items, alpha=1.0, step=0.10):
+def fadeout_text(items, alpha=1.0, step=0.05):
     if alpha > 0:
         color = f"#{int(255 * alpha):02x}{int(255 * alpha):02x}{int(255 * alpha):02x}"
         for item in items:
             canvas.itemconfig(item, fill=color)
-        root.after(100, fadeout_text, items, alpha - step)
+        root.after(10, fadeout_text, items, alpha - step)
     else:
         for item in items:
             canvas.delete(item)
